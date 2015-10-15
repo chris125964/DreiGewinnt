@@ -6,6 +6,7 @@ public class Spiel {
 
 	private final double SPIEL_GEWINN = 1.0;
 	private final double SPIEL_VERLUST = -1.0;
+	private final double SPIEL_UNENTSCHIEDEN = 0.0;
 
 	public Spiel() {
 	}
@@ -14,7 +15,7 @@ public class Spiel {
 			final Spieler pSpielerAmZug, final Spieler pBewerteterSpieler) {
 
 		SpielzugRO aktuellerSpielzug = new SpielzugRO();
-		double maxGewonnen = 0;
+		double maxGewonnen = this.SPIEL_UNENTSCHIEDEN;
 		if (pTiefe <= 10) {
 			if (pSpielerAmZug.equals(pBewerteterSpieler)) {
 				maxGewonnen = this.SPIEL_VERLUST;
@@ -24,7 +25,7 @@ public class Spiel {
 			List<Zug> zuege = pFeld.getAlleZuege(pSpielerAmZug);
 			Zug besterZug = null;
 			if (zuege.size() == 0) {
-				maxGewonnen = 0.0; // keine Züge -> unentschieden
+				maxGewonnen = this.SPIEL_UNENTSCHIEDEN;
 			} else {
 				for (Zug zug : zuege) {
 					Spielfeld neuesFeld = zug.doIt(pFeld, pSpielerAmZug);
@@ -43,14 +44,13 @@ public class Spiel {
 						gewonnen = naechsterSpielzug.getWertung();
 					}
 					maxGewonnen = this.wertung(pTiefe, pSpielerAmZug, pBewerteterSpieler, gewonnen, maxGewonnen);
-					if (pSpielerAmZug.equals(pBewerteterSpieler) && (maxGewonnen == this.SPIEL_GEWINN)) {
+					if (this.aktuellerSpielerHatGewonnen(pSpielerAmZug, pBewerteterSpieler, maxGewonnen)) {
 						if (pTiefe == 1) {
-
 							System.out.println("Siegzug: " + zug.toString());
 						}
 						break;
 					}
-					if (!pSpielerAmZug.equals(pBewerteterSpieler) && (maxGewonnen == this.SPIEL_VERLUST)) {
+					if (this.aktuellerSpielerHatVerloren(pSpielerAmZug, pBewerteterSpieler, maxGewonnen)) {
 						break;
 					}
 				} // for
@@ -59,6 +59,16 @@ public class Spiel {
 		}
 		aktuellerSpielzug.setWertung(maxGewonnen);
 		return aktuellerSpielzug;
+	}
+
+	private boolean aktuellerSpielerHatGewonnen(final Spieler pSpielerAmZug, final Spieler pBewerteterSpieler,
+			final double pBewertung) {
+		return (pSpielerAmZug.equals(pBewerteterSpieler) && (pBewertung == this.SPIEL_GEWINN));
+	}
+
+	private boolean aktuellerSpielerHatVerloren(final Spieler pSpielerAmZug, final Spieler pBewerteterSpieler,
+			final double pBewertung) {
+		return (!pSpielerAmZug.equals(pBewerteterSpieler) && (pBewertung == this.SPIEL_VERLUST));
 	}
 
 	private double wertung(final int pTiefe, final Spieler pSpielerAmZug, final Spieler pBewerteterSpieler,
