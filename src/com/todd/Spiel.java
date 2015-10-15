@@ -10,9 +10,10 @@ public class Spiel {
 	public Spiel() {
 	}
 
-	public int play(final int pTiefe, final Spielfeld pFeld, final SpielerRing pSpielerRing,
+	public SpielzugRO play(final int pTiefe, final Spielfeld pFeld, final SpielerRing pSpielerRing,
 			final Spieler pSpielerAmZug, final Spieler pBewerteterSpieler) {
 
+		SpielzugRO aktuellerSpielzug = new SpielzugRO();
 		int maxGewonnen = 0;
 		if (pTiefe <= 10) {
 			if (pSpielerAmZug.equals(pBewerteterSpieler)) {
@@ -37,10 +38,16 @@ public class Spiel {
 						break;
 					} else {
 						Spieler naechsterSpieler = pSpielerRing.nextSpieler(pSpielerAmZug);
-						gewonnen = this.play(pTiefe + 1, neuesFeld, pSpielerRing, naechsterSpieler, pBewerteterSpieler);
+						SpielzugRO naechsterSpielzug = this.play(pTiefe + 1, neuesFeld, pSpielerRing, naechsterSpieler,
+								pBewerteterSpieler);
+						gewonnen = naechsterSpielzug.getWertung();
 					}
 					maxGewonnen = this.wertung(pTiefe, pSpielerAmZug, pBewerteterSpieler, gewonnen, maxGewonnen);
 					if (pSpielerAmZug.equals(pBewerteterSpieler) && (maxGewonnen == this.SPIEL_GEWINN)) {
+						if (pTiefe == 1) {
+
+							System.out.println("Siegzug: " + zug.toString());
+						}
 						break;
 					}
 					if (!pSpielerAmZug.equals(pBewerteterSpieler) && (maxGewonnen == this.SPIEL_VERLUST)) {
@@ -50,7 +57,8 @@ public class Spiel {
 			}
 			this.printSummary(pTiefe, maxGewonnen, besterZug);
 		}
-		return maxGewonnen;
+		aktuellerSpielzug.setWertung(maxGewonnen);
+		return aktuellerSpielzug;
 	}
 
 	private int wertung(final int pTiefe, final Spieler pSpielerAmZug, final Spieler pBewerteterSpieler,

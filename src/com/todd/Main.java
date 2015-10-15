@@ -13,12 +13,12 @@ public class Main {
 		feld.add(spieler1);
 		feld.add(spieler2);
 		feld.setAktuellerSpieler(spieler1);
-		feld.setFeld(0, 0, spieler1.getFarbe());
+		feld.setFeld(0, 0, spieler2.getFarbe());
 		feld.setFeld(0, 1, spieler2.getFarbe());
 		feld.setFeld(0, 2, spieler1.getFarbe());
-		feld.setFeld(1, 0, spieler2.getFarbe());
+		feld.setFeld(1, 0, spieler1.getFarbe());
 		// feld.setFeld(1, 1, spieler1.getFarbe());
-		// feld.setFeld(3, 1, spieler2.getFarbe());
+		// feld.setFeld(2, 0, spieler2.getFarbe());
 		feld.print();
 		List<Zug> zuege = feld.getAlleZuege(spieler1);
 
@@ -26,6 +26,6 @@ public class Main {
 		SpielerRing spielerRing = new SpielerRing();
 		spielerRing.add(spieler1);
 		spielerRing.add(spieler2);
-		spiel.play(1, feld, spielerRing, spieler1, spieler1);
+		SpielzugRO spielzug = spiel.play(1, feld, spielerRing, spieler1, spieler1);
 	}
 }
