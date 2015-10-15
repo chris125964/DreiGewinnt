@@ -4,8 +4,8 @@ import java.util.List;
 
 public class Spiel {
 
-	private final int SPIEL_GEWINN = 100;
-	private final int SPIEL_VERLUST = -100;
+	private final double SPIEL_GEWINN = 1.0;
+	private final double SPIEL_VERLUST = -1.0;
 
 	public Spiel() {
 	}
@@ -14,7 +14,7 @@ public class Spiel {
 			final Spieler pSpielerAmZug, final Spieler pBewerteterSpieler) {
 
 		SpielzugRO aktuellerSpielzug = new SpielzugRO();
-		int maxGewonnen = 0;
+		double maxGewonnen = 0;
 		if (pTiefe <= 10) {
 			if (pSpielerAmZug.equals(pBewerteterSpieler)) {
 				maxGewonnen = this.SPIEL_VERLUST;
@@ -24,11 +24,11 @@ public class Spiel {
 			List<Zug> zuege = pFeld.getAlleZuege(pSpielerAmZug);
 			Zug besterZug = null;
 			if (zuege.size() == 0) {
-				maxGewonnen = 0; // keine Züge -> unentschieden
+				maxGewonnen = 0.0; // keine Züge -> unentschieden
 			} else {
 				for (Zug zug : zuege) {
 					Spielfeld neuesFeld = zug.doIt(pFeld, pSpielerAmZug);
-					int gewonnen = neuesFeld.gewonnen(pSpielerAmZug, pBewerteterSpieler);
+					double gewonnen = neuesFeld.gewonnen(pSpielerAmZug, pBewerteterSpieler);
 					this.printZug(pTiefe, zug, gewonnen);
 
 					if ((gewonnen == this.SPIEL_GEWINN) || (gewonnen == this.SPIEL_VERLUST)) {
@@ -61,9 +61,9 @@ public class Spiel {
 		return aktuellerSpielzug;
 	}
 
-	private int wertung(final int pTiefe, final Spieler pSpielerAmZug, final Spieler pBewerteterSpieler,
-			final int pGewonnen, final int pMaxGewonnen) {
-		int maxGewonnen = 0;
+	private double wertung(final int pTiefe, final Spieler pSpielerAmZug, final Spieler pBewerteterSpieler,
+			final double pGewonnen, final double pMaxGewonnen) {
+		double maxGewonnen = 0;
 		if (pSpielerAmZug.equals(pBewerteterSpieler)) {
 			maxGewonnen = Math.max(pMaxGewonnen, pGewonnen);
 		} else {
@@ -72,7 +72,7 @@ public class Spiel {
 		return maxGewonnen;
 	}
 
-	private void printSummary(final int pTiefe, final int pMaxGewonnen, final Zug pBesterZug) {
+	private void printSummary(final int pTiefe, final double pMaxGewonnen, final Zug pBesterZug) {
 		if ((pTiefe == 2) && (pMaxGewonnen == 100)) {
 			System.out.println();
 		}
@@ -81,7 +81,7 @@ public class Spiel {
 				+ ((pBesterZug != null) ? pBesterZug.toString() : "---"));
 	}
 
-	private void printZug(final int pTiefe, final Zug pZug, final int pGewonnen) {
+	private void printZug(final int pTiefe, final Zug pZug, final double pGewonnen) {
 		this.indent(pTiefe);
 		System.out.println(pTiefe + ") Zug: " + pZug.toString() + " - Bewertung: " + pGewonnen);
 	}

@@ -110,8 +110,8 @@ public class Spielfeld {
 		return zuege;
 	}
 
-	public int gewonnen(final Spieler pSpieler, final Spieler pBewerteterSpieler) {
-		int gewonnen = 0;
+	public double gewonnen(final Spieler pSpieler, final Spieler pBewerteterSpieler) {
+		double gewonnen = 0;
 		for (int i = 0; i < this.SPIELFELD_LAENGE_SENKRECHT; i++) {
 			for (int j = 0; j < this.SPIELFELD_LAENGE_WAAGRECHT; j++) {
 				ESpielfigur spieler = this.getFeld(i, j);
@@ -120,49 +120,49 @@ public class Spielfeld {
 						for (int dy = -1; dy <= 1; dy++) {
 							if ((dx != 0) || (dy != 0)) {
 								gewonnen = this.gewonnenProRichtung(pSpieler, pBewerteterSpieler, i, j, dx, dy);
-								if ((gewonnen == 100) || (gewonnen == -100)) {
+								if ((gewonnen == 1.0) || (gewonnen == -1.0)) {
 									break;
 								}
 							}
 						}
-						if ((gewonnen == 100) || (gewonnen == -100)) {
+						if ((gewonnen == 1.0) || (gewonnen == -1.0)) {
 							break;
 						}
 					}
 				}
-				if ((gewonnen == 100) || (gewonnen == -100)) {
+				if ((gewonnen == 1.0) || (gewonnen == -1.0)) {
 					break;
 				}
 			}
-			if ((gewonnen == 100) || (gewonnen == -100)) {
+			if ((gewonnen == 1.0) || (gewonnen == -1.0)) {
 				break;
 			}
 		}
 		return gewonnen;
 	}
 
-	private int gewonnenProRichtung(final Spieler pSpieler, final Spieler pBewerteterSpieler, final int x, final int y,
-			final int dx, final int dy) {
-		int gewonnen = 0;
+	private double gewonnenProRichtung(final Spieler pSpieler, final Spieler pBewerteterSpieler, final int x,
+			final int y, final int dx, final int dy) {
+		double gewonnen = 0;
 		ESpielfigur farbe = pSpieler.getFarbe();
 		if (this.getFeld(x + dx, y + dy) == farbe) {
 			if (this.getFeld(x + (2 * dx), y + (2 * dy)) == farbe) {
 				if (pSpieler.equals(pBewerteterSpieler)) {
-					gewonnen = 100;
+					gewonnen = 1.0;
 				} else {
-					gewonnen = -100;
+					gewonnen = -1.0;
 				}
 			}
 		}
 		return gewonnen;
 	}
 
-	public int play(final String pAktuellerZug, final int tiefe, final Spieler pSpielerAmZug, final Spieler pSpieler,
+	public double play(final String pAktuellerZug, final int tiefe, final Spieler pSpielerAmZug, final Spieler pSpieler,
 			final List<Zug> pGewinnZuege) {
-		int gewonnen = 0;
+		double gewonnen = 0;
 		List<Zug> zuege = this.getAlleZuege(pSpielerAmZug);
 		int aktuelleZugNr = 1;
-		int bewertungAktuellerZug = -1000;
+		double bewertungAktuellerZug = -1.0;
 		for (Zug zug : zuege) {
 			String aktuellerZug = pAktuellerZug + "." + String.format("%d", aktuelleZugNr);
 			Spielfeld neuesFeld = zug.doIt(this, pSpielerAmZug);

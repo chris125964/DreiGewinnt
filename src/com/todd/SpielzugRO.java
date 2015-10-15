@@ -2,14 +2,14 @@ package com.todd;
 
 public class SpielzugRO {
 
-	private int wertung;
+	private double wertung;
 	private Zug gewinnZug;
 
-	public int getWertung() {
+	public double getWertung() {
 		return this.wertung;
 	}
 
-	public void setWertung(final int wertung) {
+	public void setWertung(final double wertung) {
 		this.wertung = wertung;
 	}
 
